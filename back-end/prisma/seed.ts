@@ -1,10 +1,9 @@
 import { prisma } from "../src/database.js";
 
 async function main() {
-  await prisma.recommendation.createMany({
-    data: [
+  await prisma.recommendation.create({
+    data:
       { name: "Falamansa - Xote dos Milagres", youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y" }
-    ]
   });
 }
 
