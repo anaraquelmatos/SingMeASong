@@ -118,6 +118,14 @@ describe("recommendation suit test", () => {
     cy.url().should("equal", "http://localhost:3000/");
   });
 
+  it("should click in random", () => {
+    cy.visit("http://localhost:3000/");
+    cy.intercept("GET", "/recommendations/random").as(
+      "random"
+    );
+    cy.get("div").contains("Random").click();
+    cy.url().should("equal", "http://localhost:3000/random");
+  });
 });
 
 

@@ -23,7 +23,7 @@ describe("recommendationService test suite", () => {
         expect(recommendationRepository.findByName).toBeCalled();
     })
 
-    it("should create recommendation", async () => {
+    it("shouldn't create recommendation, duplicated name", async () => {
         const recommendation: CreateRecommendationData = {
             name: "Falamansa - Xote dos Milagres",
             youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y"
