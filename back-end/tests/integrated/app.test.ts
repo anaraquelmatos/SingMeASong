@@ -1,5 +1,5 @@
-import { prisma } from "./../src/database.js";
-import App from "./../src/app.js";
+import { prisma } from "../../src/database.js";
+import App from "../../src/app.js";
 import recommendations, { deleteAllData } from "./factories/recommendationFactory.js";
 
 import supertest from "supertest";
