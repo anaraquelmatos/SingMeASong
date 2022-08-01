@@ -48,7 +48,7 @@ describe("User tests suite", () => {
         expect(register.score).toBe(2);
     });
 
-    it("given points to the a non-existent recommendation", async () => {
+    it("given points to a non-existent recommendation", async () => {
         const point = await supertest(App).post(`/recommendations/1/upvote`).send();
         expect(point.statusCode).toBe(404);
     });
@@ -67,19 +67,19 @@ describe("User tests suite", () => {
         expect(register.score).toBe(0);
     });
 
-    it("remove points from recommendation without points", async () => {
+    it("remove points from recommendation without having registered points", async () => {
         const recommendation = await recommendations.validRecommendation();
         const response = await recommendations.insert(recommendation);
         const point = await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
         expect(point.statusCode).toBe(200);
     });
 
-    it("remove points to the a non-existent recommendation", async () => {
+    it("remove points to a non-existent recommendation", async () => {
         const point = await supertest(App).post(`/recommendations/1/downvote`).send();
         expect(point.statusCode).toBe(404);
     });
 
-    it("remove 5 points from recommendation without points", async () => {
+    it("remove 5 points from recommendation without having registered points", async () => {
         const recommendation = await recommendations.validRecommendation();
         const response = await recommendations.insert(recommendation);
         await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
@@ -95,7 +95,7 @@ describe("User tests suite", () => {
         expect(register.score).toBe(-5);
     });
 
-    it("remove 6 points from recommendation without points", async () => {
+    it("remove 6 points from recommendation without having registered points", async () => {
         const recommendation = await recommendations.validRecommendation();
         const response = await recommendations.insert(recommendation);
         await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
@@ -149,8 +149,6 @@ describe("User tests suite", () => {
 
     it("get recommendations with non-existent recommendation", async () => {
         const response = await supertest(App).get(`/recommendations`);
-        expect(response.statusCode).toBe(200);
-
         expect(response.text).toBe("[]");
     });
 
@@ -183,11 +181,25 @@ describe("User tests suite", () => {
         expect(response.text).not.toBe("[]");
     });
 
-    it("get random recommendation without recommendations", async () => {
+    it("get random recommendation without having registered recommendations", async () => {
         const response = await supertest(App).get(`/recommendations/random`);
         expect(response.statusCode).toBe(404);
 
         expect(response.text).toBe("");
+    });
+
+    it("get top recommendations", async () => {
+        const recommendation = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation);
+        const response = await supertest(App).get(`/recommendations/top/10`);
+        expect(response.statusCode).toBe(200);
+
+        expect(response.text).not.toBe("[]");
+    });
+
+    it("get top recommendations without having registered recommendations", async () => {
+        const response = await supertest(App).get(`/recommendations/top/10`);
+        expect(response.text).toBe("[]");
     });
 });
 
