@@ -126,6 +126,15 @@ describe("recommendation suit test", () => {
     cy.get("div").contains("Random").click();
     cy.url().should("equal", "http://localhost:3000/random");
   });
+
+  it("should click in top", () => {
+    cy.visit("http://localhost:3000/");
+    cy.intercept("GET", "/recommendations/top").as(
+      "top"
+    );
+    cy.get("div").contains("Top").click();
+    cy.url().should("equal", "http://localhost:3000/top");
+  });
 });
 
 
