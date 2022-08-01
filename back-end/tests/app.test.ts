@@ -52,6 +52,65 @@ describe("User tests suite", () => {
         const point = await supertest(App).post(`/recommendations/1/upvote`).send();
         expect(point.statusCode).toBe(404);
     });
+
+    it("remove points from recommendation", async () => {
+        const recommendation = await recommendations.validRecommendation();
+        const response = await recommendations.insert(recommendation);
+        await supertest(App).post(`/recommendations/${response.id}/upvote`).send();
+        const point = await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        expect(point.statusCode).toBe(200);
+
+        const register = await prisma.recommendation.findFirst({
+            where: { id: response.id }
+        });
+        
+        expect(register.score).toBe(0);
+    });
+
+    it("remove points from recommendation without points", async () => {
+        const recommendation = await recommendations.validRecommendation();
+        const response = await recommendations.insert(recommendation);
+        const point = await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        expect(point.statusCode).toBe(200);
+    });
+
+    it("remove points to the a non-existent recommendation", async () => {
+        const point = await supertest(App).post(`/recommendations/1/downvote`).send();
+        expect(point.statusCode).toBe(404);
+    });
+
+    it("remove 5 points from recommendation without points", async () => {
+        const recommendation = await recommendations.validRecommendation();
+        const response = await recommendations.insert(recommendation);
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+
+        const register = await prisma.recommendation.findFirst({
+            where: { id: response.id }
+        });
+        
+        expect(register.score).toBe(-5);
+    });
+
+    it("remove 6 points from recommendation without points", async () => {
+        const recommendation = await recommendations.validRecommendation();
+        const response = await recommendations.insert(recommendation);
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+        await supertest(App).post(`/recommendations/${response.id}/downvote`).send();
+
+        const register = await prisma.recommendation.findFirst({
+            where: { id: response.id }
+        });
+   
+        expect(register).toBe(null);
+    });
 });
 
 afterAll(async () => {
