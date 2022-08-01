@@ -2,6 +2,7 @@ import { jest } from "@jest/globals";
 
 import { CreateRecommendationData, recommendationService } from "./../../src/services/recommendationsService.js";
 import { recommendationRepository } from "./../../src/repositories/recommendationRepository.js";
+import recommendations from "./factories/recommendationFactory.js";
 
 jest.mock("./../../src/repositories/recommendationRepository.js");
 
@@ -100,12 +101,26 @@ describe("recommendationService test suite", () => {
     //     })
     //     jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => { return { score: -20 } });
     //     jest.spyOn(recommendationRepository, "remove").mockImplementationOnce((): any => { });
-        
+
     //     await recommendationService.downvote(1);
 
     //     expect(recommendationRepository.find).toBeCalled();
     //     expect(recommendationRepository.updateScore).toBeCalled();
     //     expect(recommendationRepository.updateScore).toBeCalled();
     // })
+
+    it("should get ten recommendations", async () => {
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return recommendations.recommendations});
+        const promise = await recommendationService.get();
+
+        expect(promise.length).toEqual(10);
+    })
+
+    it("should get any recommendations", async () => {
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return []});
+        const promise = await recommendationService.get();
+
+        expect(promise.length).toEqual(0);
+    })
 
 })
