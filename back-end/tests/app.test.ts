@@ -153,6 +153,26 @@ describe("User tests suite", () => {
 
         expect(response.text).toBe("[]");
     });
+
+    it("get recommendation from id", async () => {
+        const recommendation = await recommendations.validRecommendation();
+        const infoRecommendation = await recommendations.insert(recommendation);
+        const response = await supertest(App).get(`/recommendations/${infoRecommendation.id}`);
+        expect(response.statusCode).toBe(200);
+
+        const register = await prisma.recommendation.findFirst({
+            where: { id: infoRecommendation.id }
+        });
+
+        expect(recommendation.name).toBe(register.name);
+    });
+
+    it("get recommendation with non-existent id", async () => {
+        const response = await supertest(App).get(`/recommendations/1`);
+        expect(response.statusCode).toBe(404);
+
+        expect(response.text).toBe("");
+    });
 });
 
 afterAll(async () => {
