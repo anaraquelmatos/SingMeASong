@@ -4,7 +4,12 @@ import { CreateRecommendationData, recommendationService } from "./../../src/ser
 import { recommendationRepository } from "./../../src/repositories/recommendationRepository.js";
 import recommendations from "./factories/recommendationFactory.js";
 
-jest.mock("./../../src/repositories/recommendationRepository.js");
+jest.mock("./../../src/repositories/recommendationRepository");
+
+beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
+});
 
 describe("recommendationService test suite", () => {
     it("should create recommendation", async () => {
@@ -60,24 +65,24 @@ describe("recommendationService test suite", () => {
         expect(promise).rejects.toEqual({ message: "", type: "not_found" });
     })
 
-    // it("should insert downvote", async () => {
-    //     jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => {
-    //         return {
-    //             id: 1,
-    //             name: "Xote dos Milagres",
-    //             youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y",
-    //             score: 0
-    //         }
-    //     })
-    //     jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => { return { score: 20 } });
-    //     jest.spyOn(recommendationRepository, "remove").mockImplementationOnce((): any => { });
+    it("should insert downvote", async () => {
+        jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => {
+            return {
+                id: 1,
+                name: "Xote dos Milagres",
+                youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y",
+                score: 20
+            }
+        })
+        jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => { return { score: 10 } });
+        jest.spyOn(recommendationRepository, "remove").mockImplementationOnce((): any => { });
 
-    //     await recommendationService.downvote(1);
+        await recommendationService.downvote(1);
 
-    //     expect(recommendationRepository.find).toBeCalled();
-    //     expect(recommendationRepository.remove).toBeCalled();
-    //     expect(recommendationRepository.updateScore).toBeCalled();
-    // })
+        expect(recommendationRepository.find).toBeCalled();
+        expect(recommendationRepository.remove).not.toBeCalled();
+        expect(recommendationRepository.updateScore).toBeCalled();
+    })
 
     it("shouldn't insert downvote with non-existent id", async () => {
         jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => { });
@@ -86,27 +91,28 @@ describe("recommendationService test suite", () => {
         const promise = recommendationService.downvote(1);
         expect(promise).rejects.toEqual({ message: "", type: "not_found" });
         expect(recommendationRepository.find).toBeCalled();
-        expect(recommendationRepository.updateScore).toBeCalled();
+        expect(recommendationRepository.updateScore).not.toBeCalled();
+        expect(recommendationRepository.remove).not.toBeCalled();
     })
 
-    // it("shouldn't insert downvote with score less than -5", async () => {
-    //     jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => {
-    //         return {
-    //             id: 1,
-    //             name: "Xote dos Milagres",
-    //             youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y",
-    //             score: 0
-    //         }
-    //     })
-    //     jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => { return { score: -20 } });
-    //     jest.spyOn(recommendationRepository, "remove").mockImplementationOnce((): any => { });
+    it("shouldn't insert downvote with score less than -5", async () => {
+        jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => {
+            return {
+                id: 1,
+                name: "Xote dos Milagres",
+                youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y",
+                score: 0
+            }
+        })
+        jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => { return { score: -20 } });
+        jest.spyOn(recommendationRepository, "remove").mockImplementationOnce((): any => { });
 
-    //     await recommendationService.downvote(1);
+        await recommendationService.downvote(1);
 
-    //     expect(recommendationRepository.find).toBeCalled();
-    //     expect(recommendationRepository.updateScore).toBeCalled();
-    //     expect(recommendationRepository.updateScore).toBeCalled();
-    // })
+        expect(recommendationRepository.find).toBeCalled();
+        expect(recommendationRepository.updateScore).toBeCalled();
+        expect(recommendationRepository.remove).toBeCalled();
+    })
 
     it("should get ten recommendations", async () => {
         jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return recommendations.recommendations });
