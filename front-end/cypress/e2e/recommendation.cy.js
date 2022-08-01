@@ -26,6 +26,19 @@ describe("recommendation suit test", () => {
     cy.url().should("equal", "http://localhost:3000/");
   });
 
+  it("shouldn't create recommendation, without required data", () => {
+    cy.visit("http://localhost:3000/");
+
+    cy.intercept("POST", "/recommendations").as("createRecommendation");
+    cy.get("button").click();
+    cy.wait("@createRecommendation");
+
+    cy.on("window:alert", (t) => {
+      expect(t).to.contains("Error creating recommendation!");
+    });
+    cy.url().should("equal", "http://localhost:3000/");
+  });
+
   it("shouldn't create recommendation with invalid youtube link", () => {
     const youtubeLink = `${faker.internet.password()}`;
     const recommendation = {
