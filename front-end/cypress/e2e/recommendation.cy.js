@@ -89,6 +89,22 @@ describe("recommendation suit test", () => {
     cy.url().should("equal", "http://localhost:3000/");
   });
 
+  it("should insert downvote", () => {
+    const youtubeLink = `https://www.youtube.com/${faker.internet.password()}`;
+    const recommendation = {
+      name: faker.name.findName(),
+      youtubeLink: youtubeLink,
+    };
+    cy.visit("http://localhost:3000/");
+    cy.createRecommendation(recommendation);
+    cy.get("div:last-child article:last-child svg:last-child").click()
+    cy.intercept("POST", "/recommendations/1/downvote").as(
+      "upvote"
+    );
+    cy.get("button").click();
+    cy.url().should("equal", "http://localhost:3000/");
+  });
+
 });
 
 
