@@ -132,4 +132,19 @@ describe("recommendationService test suite", () => {
         expect(promise).rejects.toEqual({ message: "", type: "not_found" });
         expect(recommendationRepository.find).toBeCalled();
     })
+
+    it("should get random recommendations", async () => {
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return recommendations.recommendations });
+        const promise = await recommendationService.getRandom();
+        expect(promise).not.toBeNull();
+        expect(recommendationRepository.findAll).toBeCalled();
+    })
+
+
+    it("shouldn't get random recommendations", async () => {
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return [{}] });
+        const promise = await recommendationService.getRandom();
+        expect(promise.id).toBeUndefined();
+        expect(recommendationRepository.findAll).toBeCalled();
+    })
 })
