@@ -30,7 +30,7 @@ async function validRecommendation() {
 }
 
 async function insert(data: Recommendation) {
-    await prisma.recommendation.create({ data });
+    return await prisma.recommendation.create({ data });
 }
 
 const recommendations = {
