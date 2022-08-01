@@ -10,8 +10,10 @@ describe("recommendationService test suite", () => {
     it("should create recommendation", async () => {
         jest.spyOn(recommendationRepository, "create").mockImplementationOnce((): any => { });
         jest.spyOn(recommendationRepository, "findByName").mockImplementationOnce((): any => { });
-
-        await recommendationService.insert({ name: "Falamansa - Xote dos Milagres", youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y" });
+        await recommendationService.insert({
+            name: "Falamansa - Xote dos Milagres",
+            youtubeLink: "https://www.youtube.com/watch?v=chwyjJbcs1Y"
+        });
         expect(recommendationRepository.create).toBeCalled();
         expect(recommendationRepository.findByName).toBeCalled();
     })
@@ -46,7 +48,6 @@ describe("recommendationService test suite", () => {
         })
 
         jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => { });
-
         await recommendationService.upvote(1);
         expect(recommendationRepository.find).toBeCalled();
         expect(recommendationRepository.updateScore).toBeCalled();
@@ -56,7 +57,6 @@ describe("recommendationService test suite", () => {
         jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => { });
         jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => { });
         const promise = recommendationService.upvote(1);
-
         expect(promise).rejects.toEqual({ message: "", type: "not_found" });
     })
 
@@ -84,7 +84,6 @@ describe("recommendationService test suite", () => {
         jest.spyOn(recommendationRepository, "remove").mockImplementationOnce((): any => { });
         jest.spyOn(recommendationRepository, "updateScore").mockImplementationOnce((): any => { });
         const promise = recommendationService.downvote(1);
-
         expect(promise).rejects.toEqual({ message: "", type: "not_found" });
         expect(recommendationRepository.find).toBeCalled();
         expect(recommendationRepository.updateScore).toBeCalled();
@@ -110,17 +109,27 @@ describe("recommendationService test suite", () => {
     // })
 
     it("should get ten recommendations", async () => {
-        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return recommendations.recommendations});
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return recommendations.recommendations });
         const promise = await recommendationService.get();
-
         expect(promise.length).toEqual(10);
     })
 
     it("should get any recommendations", async () => {
-        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return []});
+        jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return [] });
         const promise = await recommendationService.get();
-
         expect(promise.length).toEqual(0);
     })
 
+    it("should get recommendations from id", async () => {
+        jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => { return recommendations.recommendations[1] });
+        await recommendationService.getById(2);
+        expect(recommendationRepository.find).toBeCalled();
+    })
+
+    it("shouldn't get recommendations from id", async () => {
+        jest.spyOn(recommendationRepository, "find").mockImplementationOnce((): any => { });
+        const promise = recommendationService.getById(2);
+        expect(promise).rejects.toEqual({ message: "", type: "not_found" });
+        expect(recommendationRepository.find).toBeCalled();
+    })
 })
