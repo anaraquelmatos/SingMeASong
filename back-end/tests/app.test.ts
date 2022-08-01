@@ -173,6 +173,22 @@ describe("User tests suite", () => {
 
         expect(response.text).toBe("");
     });
+
+    it("get random recommendation", async () => {
+        const recommendation = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation);
+        const response = await supertest(App).get(`/recommendations/random`);
+        expect(response.statusCode).toBe(200);
+
+        expect(response.text).not.toBe("[]");
+    });
+
+    it("get random recommendation without recommendations", async () => {
+        const response = await supertest(App).get(`/recommendations/random`);
+        expect(response.statusCode).toBe(404);
+
+        expect(response.text).toBe("");
+    });
 });
 
 afterAll(async () => {
