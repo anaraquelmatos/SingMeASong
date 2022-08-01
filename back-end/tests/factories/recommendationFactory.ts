@@ -21,7 +21,7 @@ async function invalidLink() {
 }
 
 async function validRecommendation() {
-    const name = faker.science.chemicalElement().name;
+    const name = faker.company.companyName();
     const youtube = faker.company.catchPhraseDescriptor();
 
     const youtubeLink = `https://www.youtube.com/watch?${youtube}`;

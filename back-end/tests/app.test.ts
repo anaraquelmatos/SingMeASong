@@ -111,6 +111,48 @@ describe("User tests suite", () => {
    
         expect(register).toBe(null);
     });
+
+    it("get 10 recommendations", async () => {
+        const recommendation1 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation1);
+        const recommendation2 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation2);
+        const recommendation3 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation3);
+        const recommendation4 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation4);
+        const recommendation5 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation5);
+        const recommendation6 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation6);
+        const recommendation7 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation7);
+        const recommendation8 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation8);
+        const recommendation9 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation9);
+        const recommendation10 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation10);
+        const recommendation11 = await recommendations.validRecommendation();
+        await recommendations.insert(recommendation11);
+        const response = await supertest(App).get(`/recommendations`);
+        expect(response.statusCode).toBe(200);
+
+        expect(response.text).not.toBe("[]");
+
+        const register = await prisma.recommendation.findFirst({
+            where: { name: recommendation10.name }
+        });
+
+        expect(recommendation10.name).toBe(register.name);
+    });
+
+    it("get recommendations with non-existent recommendation", async () => {
+        const response = await supertest(App).get(`/recommendations`);
+        expect(response.statusCode).toBe(200);
+
+        expect(response.text).toBe("[]");
+    });
 });
 
 afterAll(async () => {
