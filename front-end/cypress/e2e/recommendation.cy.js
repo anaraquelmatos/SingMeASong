@@ -26,7 +26,7 @@ describe("recommendation suit test", () => {
     cy.url().should("equal", "http://localhost:3000/");
   });
 
-  it("should create recommendation with invalid youtube link", () => {
+  it("shouldn't create recommendation with invalid youtube link", () => {
     const youtubeLink = `${faker.internet.password()}`;
     const recommendation = {
       name: faker.name.findName(),
@@ -34,6 +34,30 @@ describe("recommendation suit test", () => {
     };
 
     cy.visit("http://localhost:3000/");
+    cy.get('input[placeholder="Name"]').type(recommendation.name);
+    cy.get('input[placeholder="https://youtu.be/..."]').type(
+      recommendation.youtubeLink
+    );
+
+    cy.intercept("POST", "/recommendations").as("createRecommendation");
+    cy.get("button").click();
+    cy.wait("@createRecommendation");
+
+    cy.on("window:alert", (t) => {
+      expect(t).to.contains("Error creating recommendation!");
+    });
+    cy.url().should("equal", "http://localhost:3000/");
+  });
+
+  it("shouldn't create recommendation with duplicated name", () => {
+    const youtubeLink = `https://www.youtube.com/${faker.internet.password()}`;
+    const recommendation = {
+      name: faker.name.findName(),
+      youtubeLink: youtubeLink,
+    };
+
+    cy.visit("http://localhost:3000/");
+    cy.createRecommendation(recommendation);
     cy.get('input[placeholder="Name"]').type(recommendation.name);
     cy.get('input[placeholder="https://youtu.be/..."]').type(
       recommendation.youtubeLink
@@ -64,6 +88,7 @@ describe("recommendation suit test", () => {
     cy.get("button").click();
     cy.url().should("equal", "http://localhost:3000/");
   });
+
 });
 
 
