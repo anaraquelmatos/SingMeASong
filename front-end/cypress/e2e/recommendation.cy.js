@@ -43,6 +43,9 @@ describe("recommendation suit test", () => {
     cy.get("button").click();
     cy.wait("@createRecommendation");
 
+    cy.on('window:alert',(t)=>{
+      expect(t).to.contains('Error creating recommendation!');
+   })
     cy.url().should("equal", "http://localhost:3000/");
   });
 });
