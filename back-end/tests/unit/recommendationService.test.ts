@@ -140,11 +140,25 @@ describe("recommendationService test suite", () => {
         expect(recommendationRepository.findAll).toBeCalled();
     })
 
-
     it("shouldn't get random recommendations", async () => {
         jest.spyOn(recommendationRepository, "findAll").mockImplementationOnce((): any => { return [{}] });
         const promise = await recommendationService.getRandom();
         expect(promise.id).toBeUndefined();
         expect(recommendationRepository.findAll).toBeCalled();
+    })
+
+    it("should get top recommendations", async () => {
+        jest.spyOn(recommendationRepository, "getAmountByScore").mockImplementationOnce((): any => {
+            return [
+                recommendations.recommendations[0],
+                recommendations.recommendations[1],
+                recommendations.recommendations[2],
+                recommendations.recommendations[3]
+            ]
+        });
+        const promise = await recommendationService.getTop(4);
+        expect(promise).not.toBeNull();
+        expect(promise.length).toEqual(4);
+        expect(recommendationRepository.getAmountByScore).toBeCalled();
     })
 })

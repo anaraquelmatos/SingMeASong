@@ -59,13 +59,13 @@ FN:51,getRandom
 FN:64,getByScore
 FN:77,getScoreFilter
 FNF:9
-FNH:8
+FNH:9
 FNDA:2,insert
 FNDA:2,upvote
 FNDA:1,downvote
 FNDA:5,getByIdOrFail
 FNDA:2,get
-FNDA:0,getTop
+FNDA:1,getTop
 FNDA:2,getRandom
 FNDA:2,getByScore
 FNDA:2,getScoreFilter
@@ -83,7 +83,7 @@ DA:37,5
 DA:38,5
 DA:40,2
 DA:44,2
-DA:48,0
+DA:48,1
 DA:52,2
 DA:53,2
 DA:55,2
@@ -96,8 +96,8 @@ DA:70,2
 DA:71,2
 DA:74,0
 DA:78,2
-DA:79,1
-DA:82,1
+DA:79,2
+DA:82,0
 DA:85,1
 LF:30
 LH:24
@@ -106,7 +106,7 @@ BRDA:31,1,0,0
 BRDA:38,2,0,3
 BRDA:56,3,0,0
 BRDA:70,4,0,2
-BRDA:78,5,0,1
+BRDA:78,5,0,2
 BRF:6
 BRH:4
 end_of_record
