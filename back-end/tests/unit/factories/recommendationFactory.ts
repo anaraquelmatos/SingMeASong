@@ -5,61 +5,61 @@ const recommendations = [
         id: 1,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 30
     },
     {
         id: 2,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 3
     },
     {
         id: 3,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 23
     },
     {
         id: 4,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 34
     },
     {
         id: 5,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 45
     },
     {
         id: 6,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 67
     },
     {
         id: 7,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 87
     },
     {
         id: 8,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 21
     },
     {
         id: 9,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 33
     },
     {
         id: 10,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 48
     }
 ];
 
@@ -185,7 +185,7 @@ const recommendations70 = [
         id: 10,
         name: faker.random.word(),
         youtubeLink: `https://www.youtube.com/${faker.company.catchPhraseDescriptor()}`,
-        score: faker.random.numeric()
+        score: 76
     }
 ];
 
